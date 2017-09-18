@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             bundle.putString("myKey", "Now I'm connected with netpie");
             msg.setData(bundle);
             handler.sendMessage(msg);
-            Log.i("Connected", "Now I'm connected with netpie");
+            Log.i("Connected", "Now I'm connected with netpie 555");
         }
 
         @Override
