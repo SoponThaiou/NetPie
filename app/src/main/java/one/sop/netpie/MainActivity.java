@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
             Bundle bundle = msg.getData();
             String string = bundle.getString("myKey");
             TextView myTextView = (TextView) findViewById(R.id.textView);
-            myTextView.append(string + "\n");
+            myTextView.append("\n" + string);
         }   //handleMessage
     };
 
