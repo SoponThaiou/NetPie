@@ -5,6 +5,9 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import io.netpie.microgear.Microgear;
@@ -33,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final Button buttonSend = (Button) findViewById(R.id.buttonSend);
+        final EditText editTextSend = (EditText) findViewById(R.id.editTextSend);
+
         MicrogearCallBack callback = new MicrogearCallBack();
         microgear.connect(appid, key, secret, alias);
         microgear.setCallback(callback);
         microgear.subscribe("Topictest");
-        (new Thread(new Runnable() {
+        /*(new Thread(new Runnable() {
             int count = 1;
 
             @Override
@@ -52,12 +58,21 @@ public class MainActivity extends AppCompatActivity {
                                 count++;
                             }
                         });
-                        Thread.sleep(2000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         // ooops
                     }
             }
-        })).start();
+        })).start();*/
+
+        buttonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                microgear.publish("Topictest", String.valueOf(editTextSend.getText()));
+                editTextSend.setText("");
+            }
+        });
+
     }   //conCreate
 
     protected void onDestroy() {
