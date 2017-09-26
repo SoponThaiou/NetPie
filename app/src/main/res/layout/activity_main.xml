@@ -24,14 +24,13 @@
         android:id="@+id/editTextSend"
         android:layout_width="234dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="ใส่ข้อความที่จะส่ง"
+        android:hint="ใส่ข้อความ Topic"
         android:inputType="textPersonName"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/buttonSend"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
-
 
     <Button
         android:id="@+id/buttonSend"
@@ -42,5 +41,24 @@
         app:layout_constraintLeft_toRightOf="@+id/editTextSend"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/editTextChat"
+        android:layout_width="234dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:hint="ใส่ข้อความ Chat"
+        app:layout_constraintLeft_toLeftOf="@+id/editTextSend"
+        app:layout_constraintRight_toRightOf="@+id/editTextSend"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSend" />
+
+    <Button
+        android:id="@+id/buttonChat"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="คุย"
+        app:layout_constraintRight_toRightOf="@+id/buttonSend"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSend" />
 
 </android.support.constraint.ConstraintLayout>

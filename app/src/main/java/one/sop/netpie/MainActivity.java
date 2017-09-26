@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         final Button buttonSend = (Button) findViewById(R.id.buttonSend);
         final EditText editTextSend = (EditText) findViewById(R.id.editTextSend);
+        final Button buttonChat = (Button) findViewById(R.id.buttonChat);
+        final EditText editTextChat = (EditText) findViewById(R.id.editTextChat);
 
         MicrogearCallBack callback = new MicrogearCallBack();
         microgear.connect(appid, key, secret, alias);
@@ -70,6 +72,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 microgear.publish("Topictest", String.valueOf(editTextSend.getText()));
                 editTextSend.setText("");
+            }
+        });
+
+        buttonChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                microgear.chat("esp2866",String.valueOf(editTextChat.getText()));
+                editTextChat.setText("");
             }
         });
 
