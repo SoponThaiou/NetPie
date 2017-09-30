@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         buttonChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                microgear.chat("esp2866",String.valueOf(editTextChat.getText()));
+                microgear.chat("esp8266",String.valueOf(editTextChat.getText()));
                 editTextChat.setText("");
             }
         });
