@@ -6,9 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import io.netpie.microgear.Microgear;
 import io.netpie.microgear.MicrogearEventListener;
@@ -20,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private String key = "J9Kf8JeV6ikpYU5";
     private String secret = "TAreTCkEdswAtxJgnDrJjjlmn";
     private String alias = "FromAndroidDevice";
+
+    private JSONObject jsonObject = null;
+    private ArrayList<String> deviceList = new ArrayList<>();
 
     Handler handler = new Handler() {
         @Override
@@ -36,36 +47,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button buttonSend = (Button) findViewById(R.id.buttonSend);
+        Button buttonSend = (Button) findViewById(R.id.buttonSend);
+        Button buttonClear = (Button) findViewById(R.id.buttonClear);
+        final TextView textView = (TextView) findViewById(R.id.textView);
         final EditText editTextSend = (EditText) findViewById(R.id.editTextSend);
-        final Button buttonChat = (Button) findViewById(R.id.buttonChat);
-        final EditText editTextChat = (EditText) findViewById(R.id.editTextChat);
+
+        Spinner mSpinnerDevice = (Spinner) findViewById(R.id.spinnerDevice);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, deviceList);
+        mSpinnerDevice.setAdapter(adapter);
 
         MicrogearCallBack callback = new MicrogearCallBack();
         microgear.connect(appid, key, secret, alias);
         microgear.setCallback(callback);
         microgear.subscribe("Topictest");
-        /*(new Thread(new Runnable() {
-            int count = 1;
-
-            @Override
-            public void run() {
-                while (!Thread.interrupted())
-                    try {
-                        runOnUiThread(new Runnable() // start actions in UI thread
-                        {
-                            @Override
-                            public void run() {
-                                microgear.publish("Topictest", String.valueOf(count) + ".  Test message");
-                                count++;
-                            }
-                        });
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        // ooops
-                    }
-            }
-        })).start();*/
 
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,11 +69,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        buttonChat.setOnClickListener(new View.OnClickListener() {
+        buttonClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                microgear.chat("esp8266",String.valueOf(editTextChat.getText()));
-                editTextChat.setText("");
+                textView.setText("");
             }
         });
 
@@ -123,6 +116,35 @@ public class MainActivity extends AppCompatActivity {
             bundle.putString("myKey", "New friend Connect :" + token);
             msg.setData(bundle);
             handler.sendMessage(msg);
+
+            /* Manage data to spinner */
+            if (jsonObject != null) {
+                Log.i("present", "jsonObject is not null");
+                try {
+                    jsonObject = new JSONObject(token);
+                    Log.i("present", "set token to jsonObject");
+                    Log.i("present",jsonObject.getJSONObject(token).getString("alias"));
+                    if (jsonObject.getJSONObject(token).getString("type") == "online") {
+                        Log.i("present", "type is online");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else try {
+                jsonObject = new JSONObject(token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//            try {
+//                jsonObject = new JSONObject(token);
+//                if (jsonArray.getJSONObject(0).getString("type") == "online") {
+//                    deviceList.add(jsonArray.getJSONObject(0).getString("alias"));
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+
+
             Log.i("present", "New friend Connect :" + token);
         }
 
