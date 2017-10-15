@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private String appid = "Metheepittaya";
     private String key = "J9Kf8JeV6ikpYU5";
     private String secret = "TAreTCkEdswAtxJgnDrJjjlmn";
-    private String alias = "FromAndroidDevice";
+        private String alias = "FromAndroidDevice";
 
     private JSONObject jsonObject = null;
     private ArrayList<String> deviceList = new ArrayList<>();
