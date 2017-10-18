@@ -12,12 +12,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
 import io.netpie.microgear.Microgear;
 import io.netpie.microgear.MicrogearEventListener;
 
@@ -27,10 +21,11 @@ public class MainActivity extends AppCompatActivity {
     private String appid = "Metheepittaya";
     private String key = "J9Kf8JeV6ikpYU5";
     private String secret = "TAreTCkEdswAtxJgnDrJjjlmn";
-        private String alias = "FromAndroidDevice";
+    private String alias = "FromAndroidDevice";
 
-    private JSONObject jsonObject = null;
-    private ArrayList<String> deviceList = new ArrayList<>();
+    private String[] countries = {"India", "Thai", "Japan", "Lao"};
+    private ArrayAdapter<String> arrayAdapterDevice ;
+
 
     Handler handler = new Handler() {
         @Override
@@ -52,27 +47,28 @@ public class MainActivity extends AppCompatActivity {
         final TextView textView = (TextView) findViewById(R.id.textView);
         final EditText editTextSend = (EditText) findViewById(R.id.editTextSend);
 
+        //Manage data of Spinner
         Spinner mSpinnerDevice = (Spinner) findViewById(R.id.spinnerDevice);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, deviceList);
-        mSpinnerDevice.setAdapter(adapter);
+        arrayAdapterDevice = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, countries);
+        mSpinnerDevice.setAdapter(arrayAdapterDevice);
 
         MicrogearCallBack callback = new MicrogearCallBack();
         microgear.connect(appid, key, secret, alias);
         microgear.setCallback(callback);
-        microgear.subscribe("Topictest");
+        microgear.subscribe("Topictest/#");
+
+        buttonClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textView.setText("");
+            }
+        });
 
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 microgear.publish("Topictest", String.valueOf(editTextSend.getText()));
                 editTextSend.setText("");
-            }
-        });
-
-        buttonClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textView.setText("");
             }
         });
 
@@ -88,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         microgear.bindServiceResume();
     }   //onDestroy
 
-    class MicrogearCallBack implements MicrogearEventListener {
+    private class MicrogearCallBack implements MicrogearEventListener {
         @Override
         public void onConnect() {
             Message msg = handler.obtainMessage();
@@ -116,35 +112,6 @@ public class MainActivity extends AppCompatActivity {
             bundle.putString("myKey", "New friend Connect :" + token);
             msg.setData(bundle);
             handler.sendMessage(msg);
-
-            /* Manage data to spinner */
-            if (jsonObject != null) {
-                Log.i("present", "jsonObject is not null");
-                try {
-                    jsonObject = new JSONObject(token);
-                    Log.i("present", "set token to jsonObject");
-                    Log.i("present",jsonObject.getJSONObject(token).getString("alias"));
-                    if (jsonObject.getJSONObject(token).getString("type") == "online") {
-                        Log.i("present", "type is online");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else try {
-                jsonObject = new JSONObject(token);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-//            try {
-//                jsonObject = new JSONObject(token);
-//                if (jsonArray.getJSONObject(0).getString("type") == "online") {
-//                    deviceList.add(jsonArray.getJSONObject(0).getString("alias"));
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-
-
             Log.i("present", "New friend Connect :" + token);
         }
 
